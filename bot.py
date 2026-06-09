@@ -996,7 +996,7 @@ async def publish_decision(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 ]
             ])
 
-            await context.bot.send_message(
+            sent = await context.bot.send_message(
                 chat_id=CHANNEL_ID,
                 text=final_news,
                 reply_markup=news_buttons,
@@ -1004,6 +1004,23 @@ async def publish_decision(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
 
             increment_daily_stat(pending["text"])
+
+            recall_keyboard = InlineKeyboardMarkup([
+                [
+                    InlineKeyboardButton(
+                        "↩️ استرجاع الخبر",
+                        callback_data=f"recall_news:{sent.message_id}:{datetime.now().timestamp()}"
+                    )
+                ]
+            ])
+
+            await context.bot.send_message(
+                chat_id=ADMIN_GROUP_ID,
+                message_thread_id=PRE_PUBLISH_THREAD_ID,
+                text="✅ تم نشر الخبر في قناة البيان.\n\nيمكنك استرجاعه خلال 5 دقائق فقط.",
+                reply_markup=recall_keyboard
+            )
+
         elif pending["type"] == "photo":
             await context.bot.send_photo(chat_id=CHANNEL_ID, photo=pending["file_id"], caption=pending["caption"])
         elif pending["type"] == "video":
@@ -1186,6 +1203,37 @@ async def recall_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         await query.edit_message_text(f"❌ تعذر استرداد الرسالة:\n{e}")
 
+async def recall_published_news(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+
+    try:
+        _, message_id, timestamp = query.data.split(":")
+        message_id = int(message_id)
+        timestamp = float(timestamp)
+
+        now = datetime.now().timestamp()
+
+        if now - timestamp > 300:
+            await query.edit_message_text("⏳ انتهت مهلة استرجاع الخبر.")
+            return
+
+        await context.bot.delete_message(
+            chat_id=CHANNEL_ID,
+            message_id=message_id
+        )
+
+        await query.edit_message_text("🗑️ تم استرجاع الخبر من القناة بنجاح.")
+
+        await context.bot.send_message(
+            chat_id=ADMIN_GROUP_ID,
+            message_thread_id=ARCHIVE_THREAD_ID,
+            text="🗑️ تم استرجاع خبر منشور من القناة."
+        )
+
+    except Exception as e:
+        await query.edit_message_text(f"❌ تعذر استرجاع الخبر:\n{e}")
+
 async def quick_menu_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -1277,6 +1325,7 @@ def main():
     app.add_handler(CommandHandler("menu", menu_command, filters.Chat(ADMIN_GROUP_ID)))
 
     app.add_handler(CallbackQueryHandler(recall_message, pattern="^recall:"))
+    app.add_handler(CallbackQueryHandler(recall_published_news, pattern="^recall_news:"))
     app.add_handler(CallbackQueryHandler(quick_menu_callback, pattern="^quick:"))
     app.add_handler(CallbackQueryHandler(publish_decision, pattern="^(confirm_publish|cancel_publish)$"))
     app.add_handler(CallbackQueryHandler(edit_publish, pattern="^edit_publish$"))
