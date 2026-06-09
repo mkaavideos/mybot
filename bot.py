@@ -7,7 +7,7 @@ from zoneinfo import ZoneInfo
 from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import ApplicationBuilder, MessageHandler, CommandHandler, CallbackQueryHandler, ContextTypes, filters
 
-TOKEN = os.environ.get("8282611240:AAF9rp4wj0UPRqiXOmB-PeUU8_SKm5XP_GA")
+TOKEN = os.environ.get("TOKEN")
 
 ADMIN_GROUP_ID = -1004299836917
 CHANNEL_ID = -1003979710728
