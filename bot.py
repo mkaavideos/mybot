@@ -217,6 +217,45 @@ def update_last_activity(user_id):
     stats["last_activity"][str(user_id)] = datetime.now().isoformat()
     save_stats()
 
+BANNED_WORDS = [
+    "ايري",
+    "أيري",
+    "نيك",
+    "نيكك",
+    "كس",
+    "شرموط",
+    "شرموطة",
+    "تنتاك",
+    "سب",
+    "قذف",
+    "قرن",
+    "مأير",
+    "ماير",
+    "قحبة",
+    "قحب",
+    "شلكة",
+    "شلك",
+    "منيوك",
+    "منيوكة",
+    "شراميط",
+    "منايك",
+    "ايورة",
+    "منيك",
+    "مكسكس",
+    "شرنة",
+]
+
+def contains_banned_word(text):
+    if not text:
+        return False
+
+    clean_text = text.lower().strip()
+
+    for word in BANNED_WORDS:
+        if word.lower() in clean_text:
+            return True
+
+    return False
 
 async def handle_private_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
@@ -243,6 +282,13 @@ async def handle_private_message(update: Update, context: ContextTypes.DEFAULT_T
         await message.reply_text(
             "⚠️ حرصًا على الأمان، يستقبل البوت البلاغات النصية فقط.\n\n"
             "يرجى كتابة البلاغ كنص واضح دون إرسال صور أو فيديوهات أو ملفات."
+        )
+        return
+    
+    if contains_banned_word(message.text):
+        await message.reply_text(
+            "⚠️ تعذر إرسال البلاغ.\n\n"
+            "يرجى الالتزام بلغة محترمة وخالية من الشتائم أو القذف."
         )
         return
 
@@ -285,6 +331,11 @@ async def handle_admin_reply(update: Update, context: ContextTypes.DEFAULT_TYPE)
     if update.effective_chat.id == ADMIN_GROUP_ID and message.message_thread_id == PRE_PUBLISH_THREAD_ID:
         return
     if not message.reply_to_message:
+        return
+    if message.text and contains_banned_word(message.text):
+        await message.reply_text(
+            "⚠️ لا يمكن إرسال هذا الرد لاحتوائه على كلمات غير مناسبة."
+        )
         return
 
     reply_to_id = str(message.reply_to_message.message_id)
@@ -650,6 +701,12 @@ async def handle_publish(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if message.message_thread_id != PRE_PUBLISH_THREAD_ID:
+        return
+
+    if message.text and contains_banned_word(message.text):
+        await message.reply_text(
+            "⚠️ لا يمكن متابعة الخبر لاحتوائه على كلمات غير مناسبة."
+        )
         return
 
     if message.text and message.text.startswith("/menu"):
