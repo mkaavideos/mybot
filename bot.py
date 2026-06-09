@@ -346,6 +346,10 @@ BANNED_WORDS = [
     "طيز",
     "طوز",
     "زط",
+    "طياز",
+    "طيزي",
+    "طيزو",
+    "طيزه",
 ]
 
 def contains_banned_word(text):
