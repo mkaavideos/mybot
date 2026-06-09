@@ -630,8 +630,14 @@ async def send_publish_preview(message, context, final_text):
         "type": "text",
         "text": final_text
     }
+    preview_text = (
+        f"📋 معاينة الخبر قبل النشر:\n\n"
+        f"{final_text}\n\n"
+        f"🌐 https://albayan-lb.com"
+    )
+
     await message.reply_text(
-        f"📋 معاينة الخبر قبل النشر:\n\n{final_text}",
+        preview_text,
         reply_markup=preview_buttons()
     )
 
@@ -788,7 +794,17 @@ async def publish_decision(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     try:
         if pending["type"] == "text":
-            await context.bot.send_message(chat_id=CHANNEL_ID, text=pending["text"])
+
+            final_news = (
+                f"{pending['text']}\n\n"
+                f"🌐 https://albayan-lb.com"
+            )
+
+            await context.bot.send_message(
+                chat_id=CHANNEL_ID,
+                text=final_news
+            )
+
             increment_daily_stat(pending["text"])
         elif pending["type"] == "photo":
             await context.bot.send_photo(chat_id=CHANNEL_ID, photo=pending["file_id"], caption=pending["caption"])
