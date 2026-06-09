@@ -342,6 +342,10 @@ BANNED_WORDS = [
     "btsharmet",
     "m2ayar",
     "manyaki",
+    "طز",
+    "طيز",
+    "طوز",
+    "زط",
 ]
 
 def contains_banned_word(text):
