@@ -10,7 +10,7 @@ from telegram.ext import ApplicationBuilder, MessageHandler, CommandHandler, Cal
 TOKEN = os.environ.get("TOKEN")
 
 ADMIN_GROUP_ID = -1004299836917
-CHANNEL_ID = -1003979710728
+CHANNEL_ID = -1002098510552
 REPORTERS_THREAD_ID = 3
 ARCHIVE_THREAD_ID = 6
 PRE_PUBLISH_THREAD_ID = 17
