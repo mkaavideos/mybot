@@ -797,12 +797,34 @@ async def publish_decision(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             final_news = (
                 f"{pending['text']}\n\n"
-                f"🌐 https://albayan-lb.com"
+                f"🔗 التفاصيل الكاملة:\n"
+                f"https://albayan-lb.com"
             )
+
+            news_buttons = InlineKeyboardMarkup([
+                [
+                    InlineKeyboardButton(
+                        "🤍 دعم المنصة",
+                        url="https://albayan-lb.com/donate"
+                    )
+                ],
+                [
+                    InlineKeyboardButton(
+                        "📢 قناة التلغرام",
+                        url="https://t.me/AlBayan_Newss"
+                    ),
+                    InlineKeyboardButton(
+                        "💚 قناة الواتساب",
+                        url="https://whatsapp.com/channel/0029VbApl8OBlHpfDzyrrT0f"
+                    )
+                ]
+            ])
 
             await context.bot.send_message(
                 chat_id=CHANNEL_ID,
-                text=final_news
+                text=final_news,
+                reply_markup=news_buttons,
+                disable_web_page_preview=True
             )
 
             increment_daily_stat(pending["text"])
