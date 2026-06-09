@@ -622,46 +622,46 @@ def auto_format_news(text):
     # غارة جديدة من مسيرة
     if text.startswith("غارة جديدة من مسيرة"):
         place = text.replace("غارة جديدة من مسيرة", "", 1).strip()
-        return f"💥 #غارة جديدة من الطيران المسيّر تســـتهدف {place_with_type(place)}"
+        return f"‼️ #غارة جديدة من الطيران المسيّر تســـتهدف {place_with_type(place)}"
 
     # غارة جديدة مسيرة
     if text.startswith("غارة جديدة مسيرة"):
         place = text.replace("غارة جديدة مسيرة", "", 1).strip()
-        return f"💥 #غارة جديدة من الطيران المسيّر تســـتهدف {place_with_type(place)}"
+        return f"‼️ #غارة جديدة من الطيران المسيّر تســـتهدف {place_with_type(place)}"
 
     # غارة مسيرة
     if text.startswith("غارة مسيرة"):
         place = text.replace("غارة مسيرة", "", 1).strip()
-        return f"💥 #غارة من الطيران المسيّر تســـتهدف {place_with_type(place)}"
+        return f"‼️ #غارة من الطيران المسيّر تســـتهدف {place_with_type(place)}"
 
     # مسيرة
     if text.startswith("مسيرة"):
         place = text.replace("مسيرة", "", 1).strip()
-        return f"💥 #غارة من الطيران المسيّر تســـتهدف {place_with_type(place)}"
+        return f"‼️ #غارة من الطيران المسيّر تســـتهدف {place_with_type(place)}"
 
     # غارة جديدة
     if text.startswith("غارة جديدة"):
         place = text.replace("غارة جديدة", "", 1).strip()
-        return f"💥⚠️ #غارة جديدة من الطيران الحربي تســـتهدف {place_with_type(place)}"
+        return f"‼️ #غارة جديدة من الطيران الحربي تســـتهدف {place_with_type(place)}"
 
     # غارة
     if text.startswith("غارة"):
         place = text.replace("غارة", "", 1).strip()
-        return f"💥⚠️ #غارة من الطيران الحربي تســـتهدف {place_with_type(place)}"
+        return f"‼️ #غارة من الطيران الحربي تســـتهدف {place_with_type(place)}"
 
     # قصف مدفعي / مدفعي
     if text.startswith("قصف مدفعي"):
         place = text.replace("قصف مدفعي", "", 1).strip()
-        return f"💥 #قصف_مدفعي يســـتهدف {place_with_type(place)}"
+        return f"💢 #قصف_مدفعي يســـتهدف {place_with_type(place)}"
 
     if text.startswith("مدفعي"):
         place = text.replace("مدفعي", "", 1).strip()
-        return f"💥 #قصف_مدفعي يســـتهدف {place_with_type(place)}"
+        return f"💢 #قصف_مدفعي يســـتهدف {place_with_type(place)}"
     
         # استهداف سيارة
     if text.startswith("استهداف سيارة"):
         place = text.replace("استهداف سيارة", "", 1).strip()
-        return f"💥 #استهداف سيارة في {place_with_type(place)}"
+        return f"⭕ #استهداف سيارة في {place_with_type(place)}"
 
     # استهداف دراجة
     if text.startswith("استهداف دراجة"):
@@ -685,12 +685,12 @@ def auto_format_news(text):
     # قطع طريق
     if text.startswith("قطع طريق"):
         place = text.replace("قطع طريق", "", 1).strip()
-        return f"🚧 #قطع_طريق في {place_with_type(place)}"
+        return f"⭕ #قطع_طريق في {place_with_type(place)}"
 
     # حريق
     if text.startswith("حريق"):
         place = text.replace("حريق", "", 1).strip()
-        return f"🔥 #حريق في {place_with_type(place)}"
+        return f"⭕ #حريق في {place_with_type(place)}"
 
     # انفجار / إنفجار
     if text.startswith("انفجار") or text.startswith("إنفجار"):
@@ -803,7 +803,7 @@ async def send_publish_preview(message, context, final_text):
     preview_text = (
         f"📋 معاينة الخبر قبل النشر:\n\n"
         f"{final_text}\n\n"
-        f"🌐 https://albayan-lb.com"
+        f"🔗 https://albayan-lb.com"
     )
 
     await message.reply_text(
